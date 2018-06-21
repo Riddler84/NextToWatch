@@ -4,8 +4,10 @@ include 'lib/simple_html_dom.php';
 
 function do_login( string $email, string $pwd ) 
 {
-	$email = strip_tags( trim( $email ) );
-	$pwd   = strip_tags( trim( $pwd ) );
+	$post_fields = http_build_query([
+		'email'    => strip_tags( trim( $email ) ),
+		'password' => strip_tags( trim( $pwd ) )
+	]);
 
 	$ch = curl_init();
 
@@ -13,7 +15,7 @@ function do_login( string $email, string $pwd )
 	curl_setopt( $ch, CURLOPT_URL, "https://s.to/login" );
 	curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
 	curl_setopt( $ch, CURLOPT_POST, 1 );
-	curl_setopt( $ch, CURLOPT_POSTFIELDS, "email={$email}&password={$pwd}" );
+	curl_setopt( $ch, CURLOPT_POSTFIELDS, $post_fields );
 	curl_setopt( $ch, CURLOPT_USERAGENT, $_SERVER["HTTP_USER_AGENT"] );
 
 	ob_start();
