@@ -1,0 +1,416 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	font-size: 18px;
+	margin: 0;
+	padding: 0;
+	margin-bottom: 30px;
+}
+
+header {
+	background-color: #2196F3;
+    box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.25);
+}
+
+header > .container {
+	display: flex;
+	height: 80px;
+	justify-content: space-between;
+	align-items: center;
+	color: #fff;
+}
+
+header > .container > .logo {
+	font-size: 30px;
+	font-weight: bold;
+}
+
+header > .container > .stats > div:first-child {
+	margin-bottom: 5px;
+}
+
+header > .container > .stats .badge {
+	background-color: #9CCC65;
+    color: rgba(0, 0, 0, 0.75);
+}
+
+a.link-contrast {
+	color: #fff;
+}
+
+a.link-contrast:hover {
+	color: #ccc;
+}
+
+.container {
+	max-width: 1600px;
+	margin: auto;
+	position: relative;
+}
+
+#login-form {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 90%;
+	max-width: 500px;
+}
+
+#login-form > form {
+	display: flex;
+	flex-direction: column;
+}
+
+#login-form > form > input {
+	margin-bottom: 10px;
+	padding: 8px 5px;
+	font-size: 1rem;
+	border: 1px solid #999;
+}
+
+#login-form > form > button {
+	padding: 8px 5px;
+	font-size: 1rem;
+	border: none;
+	background-color: #66bb6a;
+	color: #fff;
+	cursor: pointer;
+}
+
+#login-form > form > button:hover {
+	background-color: #549e58;
+	color: #fff;
+}
+
+.grid-container {
+	display: grid;
+	grid-template-columns: auto;
+	grid-column-gap: 15px;
+	grid-row-gap: 15px;
+}
+
+@media only screen and (min-width: 800px) {
+	.grid-container {
+		display: grid;
+		grid-template-columns: calc(50% - 7.5px) calc(50% - 7.5px);
+		grid-column-gap: 15px;
+		grid-row-gap: 15px;
+	}
+}
+
+@media only screen and (min-width: 1200px) {
+	.grid-container {
+		display: grid;
+		grid-template-columns: calc(33.33% - 10px) calc(33.33% - 10px) calc(33.33% - 10px);
+		grid-column-gap: 15px;
+		grid-row-gap: 15px;
+	}
+}
+
+.grid-item {
+	position: relative;
+	display: flex;
+	padding: 15px;
+	border-radius: 2px;
+	background-color: #F5F5F5;
+	box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.25);
+	transition: all .2s ease;
+}
+
+.grid-item:hover {
+	box-shadow: 0px 2px 5px 2px rgba(0, 0, 0, 0.25);
+}
+
+.grid-item h2 {
+	margin-top: 0;
+}
+
+.show-cover {
+	margin-right: 25px;
+}
+
+.show-cover img {
+	max-width: 135px;
+	height: auto;
+}
+
+span.badge {
+	border-radius: 2px;
+	background-color: aquamarine;
+	padding: 4px 8px;
+	font-size: small;
+	font-weight: bold;
+}
+
+.show-episode .show-meta {
+	margin: 15px 0 15px 0;
+}
+
+.show-episode .show-title {
+	/* display: flex;
+	flex-wrap: wrap;
+	align-items: center; */
+}
+
+.show-episode .show-title a {
+	text-decoration: none;
+	transition: all .2s ease;
+}
+
+.show-episode .show-title a:hover {
+	color: red;
+}
+
+.show-episode .show-lang {
+	position: absolute;
+	right: 15px;
+	bottom: 15px;
+}
+
+.show-episode .show-lang img {
+	max-height: 24px;
+	width: auto;
+}
+
+.show-filter {
+	margin: 50px 0;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.show-filter .search {
+	flex: 1;
+}
+
+.show-filter .search input {
+	width: 100%;
+	height: 50px;
+	padding: 0 15px;
+	border: 1px solid rgba(0, 0, 0, 0.25);
+	background-color: #F5F5F5;
+	font-size: 24px;
+}
+
+.show-filter .lang {
+	display: flex;
+}
+
+.show-filter .lang label {
+	display: flex;
+	justify-content: center;
+	align-content: center;
+	align-items: center;
+	border: 1px solid rgba(0, 0, 0, 0.25);
+	width: 60px;
+	height: 50px;
+	background-color: #F5F5F5;
+	cursor: pointer;
+	transition: all .4s ease;
+}
+
+.show-filter .lang label:first-child {
+	border-top-left-radius: 2px;
+	border-bottom-left-radius: 2px;
+}
+
+.show-filter .lang label:last-child {
+	border-top-right-radius: 2px;
+	border-bottom-right-radius: 2px;
+}
+
+.show-filter .lang label:not(:last-child) {
+	border-right: none;
+}
+
+.show-filter .lang label:hover {
+	background-color: #e4e4e4;
+}
+
+.show-filter .lang label.active {
+	background-color: #ccc;
+}
+
+
+/* -----------------------------------------------------
+   CSS Progress Bars
+-------------------------------------------------------- */
+.cssProgress {
+	width: 100%;
+	margin-bottom: 20px;
+}
+
+.cssProgress .progress1,
+.cssProgress .progress2,
+.cssProgress .progress3 {
+	position: relative;
+	overflow: hidden;
+	width: 100%;
+	font-family: "Roboto", sans-serif;
+}
+
+.cssProgress .cssProgress-bar {
+	display: block;
+	float: left;
+	width: 0%;
+	height: 100%;
+	background: #3798d9;
+	box-shadow: inset 0px -1px 2px rgba(0, 0, 0, 0.1);
+	-webkit-transition: width 0.8s ease-in-out;
+	transition: width 0.8s ease-in-out;
+}
+
+.cssProgress .cssProgress-label {
+	position: absolute;
+	overflow: hidden;
+	left: 0px;
+	right: 0px;
+	color: rgba(0, 0, 0, 0.6);
+	font-size: 0.7em;
+	text-align: center;
+	text-shadow: 0px 1px rgba(0, 0, 0, 0.3);
+}
+
+.cssProgress .cssProgress-info {
+	background-color: #9575cd !important;
+}
+
+.cssProgress .cssProgress-danger {
+	background-color: #ef5350 !important;
+}
+
+.cssProgress .cssProgress-success {
+	background-color: #66bb6a !important;
+}
+
+.cssProgress .cssProgress-warning {
+	background-color: #ffb74d !important;
+}
+
+.cssProgress .cssProgress-right {
+	float: right !important;
+}
+
+.cssProgress .cssProgress-label-left {
+	margin-left: 10px;
+	text-align: left !important;
+}
+
+.cssProgress .cssProgress-label-right {
+	margin-right: 10px;
+	text-align: right !important;
+}
+
+.cssProgress .cssProgress-label2 {
+	display: block;
+	margin: 2px 0;
+	padding: 0 8px;
+	font-size: 0.8em;
+}
+
+.cssProgress .cssProgress-label2.cssProgress-label2-right {
+	text-align: right;
+}
+
+.cssProgress .cssProgress-label2.cssProgress-label2-center {
+	text-align: center;
+}
+
+.cssProgress .cssProgress-stripes,
+.cssProgress .cssProgress-active,
+.cssProgress .cssProgress-active-right {
+	background-image: -webkit-linear-gradient(135deg, rgba(255, 255, 255, 0.125) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.125) 50%, rgba(255, 255, 255, 0.125) 75%, transparent 75%, transparent);
+	background-image: linear-gradient(-45deg, rgba(255, 255, 255, 0.125) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.125) 50%, rgba(255, 255, 255, 0.125) 75%, transparent 75%, transparent);
+	background-size: 35px 35px;
+}
+
+.cssProgress .cssProgress-active {
+	-webkit-animation: cssProgressActive 2s linear infinite;
+	-ms-animation: cssProgressActive 2s linear infinite;
+	animation: cssProgressActive 2s linear infinite;
+}
+
+.cssProgress .cssProgress-active-right {
+	-webkit-animation: cssProgressActiveRight 2s linear infinite;
+	-ms-animation: cssProgressActiveRight 2s linear infinite;
+	animation: cssProgressActiveRight 2s linear infinite;
+}
+
+@-webkit-keyframes cssProgressActive {
+	0% {
+		background-position: 0 0;
+	}
+	100% {
+		background-position: 35px 35px;
+	}
+}
+
+@-ms-keyframes cssProgressActive {
+	0% {
+		background-position: 0 0;
+	}
+	100% {
+		background-position: 35px 35px;
+	}
+}
+
+@keyframes cssProgressActive {
+	0% {
+		background-position: 0 0;
+	}
+	100% {
+		background-position: 35px 35px;
+	}
+}
+
+@-webkit-keyframes cssProgressActiveRight {
+	0% {
+		background-position: 0 0;
+	}
+	100% {
+		background-position: -35px -35px;
+	}
+}
+
+@-ms-keyframes cssProgressActiveRight {
+	0% {
+		background-position: 0 0;
+	}
+	100% {
+		background-position: -35px -35px;
+	}
+}
+
+@keyframes cssProgressActiveRight {
+	0% {
+		background-position: 0 0;
+	}
+	100% {
+		background-position: -35px -35px;
+	}
+}
+
+/* -----------------------------------------------------
+	 Progress Bar 3
+  -------------------------------------------------------- */
+
+.progress3 {
+	width: auto !important;
+	padding: 4px;
+	background-color: rgba(0, 0, 0, 0.1);
+	box-shadow: inset 0px 1px 2px rgba(0, 0, 0, 0.2);
+	border-radius: 3px;
+}
+
+.progress3 .cssProgress-bar {
+	height: 16px;
+	border-radius: 3px;
+}
+
+.progress3 .cssProgress-label {
+	line-height: 16px;
+}
