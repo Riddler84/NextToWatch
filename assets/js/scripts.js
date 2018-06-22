@@ -102,10 +102,6 @@ jQuery(function ($) {
 	});
 
 
-	// retrieve last seen episode at page load
-	console.log( localStorage.getItem("last_seen_show") );
-
-
 	// filter title
 	$('.show-filter .search').on('keyup', 'input', function() {
 		var searchTerm = $(this).val();
