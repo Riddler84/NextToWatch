@@ -1,5 +1,8 @@
 <?php
-include 'lib/simple_html_dom.php';
+if ( ! defined( 'ROOT_PATH' ) )	die('No direct access allowed!');
+
+
+include ROOT_PATH . '/lib/simple_html_dom.php';
 
 
 function do_login( string $email, string $pwd ) 
@@ -11,7 +14,7 @@ function do_login( string $email, string $pwd )
 
 	$ch = curl_init();
 
-	curl_setopt( $ch, CURLOPT_COOKIEJAR, dirname(__FILE__) . "/tmp/cookies.txt" );
+	curl_setopt( $ch, CURLOPT_COOKIEJAR, ROOT_PATH . "/tmp/cookies.txt" );
 	curl_setopt( $ch, CURLOPT_URL, "https://s.to/login" );
 	curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
 	curl_setopt( $ch, CURLOPT_POST, 1 );
@@ -38,7 +41,7 @@ function do_login( string $email, string $pwd )
 
 function do_logout() 
 {
-	unlink( dirname(__FILE__) . "/tmp/cookies.txt" );
+	unlink( ROOT_PATH . "/tmp/cookies.txt" );
 
 	$base_url = sprintf(
 		"%s://%s",
@@ -58,7 +61,7 @@ function get_site_html( string $url = 'https://s.to/' )
 	$ch = curl_init();
 
 	curl_setopt( $ch, CURLOPT_URL, $url );
-	curl_setopt( $ch, CURLOPT_COOKIEFILE, dirname(__FILE__) . "/tmp/cookies.txt" );
+	curl_setopt( $ch, CURLOPT_COOKIEFILE, ROOT_PATH . "/tmp/cookies.txt" );
 	curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
 	curl_setopt( $ch, CURLOPT_USERAGENT, $_SERVER["HTTP_USER_AGENT"] );
 

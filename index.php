@@ -1,8 +1,16 @@
 <?php 
-include 'functions.php';
-?>
+define( 'ROOT_PATH', dirname( __FILE__ ) );
 
-<?php
+include ROOT_PATH . '/includes/functions.php';
+
+
+if ( isset( $_POST['ajax_action'] ) && $_POST['ajax_action'] == 'get_episode' ) 
+{
+	echo get_first_unseen_episode( $_POST['ajax_data']['show_url'] );
+	exit;
+}
+
+
 if ( isset( $_GET['logout'] ) ) :
 	do_logout();
 endif;
@@ -11,6 +19,7 @@ if ( isset( $_POST['submit'] ) && $_POST['submit'] == 'login' ) :
 	do_login( $_POST['email'], $_POST['pwd'] );
 endif;
 ?>
+
 
 <!DOCTYPE html>
 <html>

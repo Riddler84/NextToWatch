@@ -10,7 +10,7 @@ jQuery(function ($) {
 		var data_url = element.attr('data-show-url');
 
 		$.ajax({
-			url: 'ajax.php',
+			url: 'index.php',
 			data: {
 				ajax_action: 'get_episode',
 				ajax_data: {
