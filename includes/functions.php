@@ -2,9 +2,15 @@
 if ( ! defined( 'ROOT_PATH' ) )	die('No direct access allowed!');
 
 
+/**
+ * Include the simple html dom library
+ */
 include ROOT_PATH . '/lib/simple_html_dom.php';
 
 
+/**
+ * Do remote login to s.to and saves a cookie file
+ */
 function do_login( string $email, string $pwd ) 
 {
 	$post_fields = http_build_query([
@@ -39,6 +45,9 @@ function do_login( string $email, string $pwd )
 }
 
 
+/**
+ * Do logout by deleting the cookie file
+ */
 function do_logout() 
 {
 	unlink( ROOT_PATH . "/tmp/cookies.txt" );
@@ -54,6 +63,9 @@ function do_logout()
 }
 
 
+/**
+ * Get the html source of a specific external site
+ */
 function get_site_html( string $url = 'https://s.to/' ) 
 {
 	$url = filter_var( $url, FILTER_SANITIZE_URL, FILTER_FLAG_SCHEME_REQUIRED );
@@ -73,6 +85,9 @@ function get_site_html( string $url = 'https://s.to/' )
 }
 
 
+/**
+ * Get the general data of all subscribed shows
+ */
 function get_subscribed_shows() 
 {
 	$shows = str_get_html( get_site_html( 'https://s.to/account/subscribed' ) );
@@ -92,10 +107,13 @@ function get_subscribed_shows()
 }
 
 
+/**
+ * Get the first unseen episode of a show
+ */
 function get_first_unseen_episode( $url ) 
 {
 	$show_page = str_get_html( get_site_html( 'https://s.to' . $url ) );
-	$first_season_episode = get_first_unseen_episode_data( $show_page );
+	$first_season_episode = get_episode_data( $show_page );
 
 	if ( ! empty( $first_season_episode ) ) 
 	{
@@ -108,7 +126,7 @@ function get_first_unseen_episode( $url )
 		if ( isset( $first_incomplete_season_url->href ) ) 
 		{
 			$show_page = str_get_html( get_site_html( 'https://s.to' . $first_incomplete_season_url->href ) );
-			$other_season_episode = get_first_unseen_episode_data( $show_page );
+			$other_season_episode = get_episode_data( $show_page );
 			
 			if ( ! empty( $other_season_episode ) ) 
 			{
@@ -121,7 +139,10 @@ function get_first_unseen_episode( $url )
 }
 
 
-function get_first_unseen_episode_data( $season_page ) 
+/**
+ * Get all relevant data of a episode
+ */
+function get_episode_data( $season_page ) 
 {
 	$first_unseen = $season_page->find( 'table.seasonEpisodesList tbody', 0 )->find( 'tr[class!=seen]', 0 );
 
@@ -155,6 +176,9 @@ function get_first_unseen_episode_data( $season_page )
 }
 
 
+/**
+ * Checks if you're logged in and retrieve your username
+ */
 function get_site_data()
 {
 	$html = str_get_html( get_site_html( 'https://s.to' ) );

@@ -1,9 +1,13 @@
 <?php 
+// define root path
 define( 'ROOT_PATH', dirname( __FILE__ ) );
 
+
+// include neccessary functions
 include ROOT_PATH . '/includes/functions.php';
 
 
+// handle ajax request and exit script
 if ( isset( $_POST['ajax_action'] ) && $_POST['ajax_action'] == 'get_episode' ) 
 {
 	echo get_first_unseen_episode( $_POST['ajax_data']['show_url'] );
@@ -11,10 +15,13 @@ if ( isset( $_POST['ajax_action'] ) && $_POST['ajax_action'] == 'get_episode' )
 }
 
 
+// logout action
 if ( isset( $_GET['logout'] ) ) :
 	do_logout();
 endif;
 
+
+// login action
 if ( isset( $_POST['submit'] ) && $_POST['submit'] == 'login' ) :
 	do_login( $_POST['email'], $_POST['pwd'] );
 endif;
