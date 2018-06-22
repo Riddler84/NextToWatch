@@ -148,14 +148,14 @@ function get_episode_data( $season_page )
 
 	$episode_data = [];
 
-	if ( ! empty( $first_unseen ) ) 
+	if ( is_object( $first_unseen ) ) 
 	{
 		$episode_data['info'] = [
 			'season' 		 => strip_tags( trim( $season_page->find( '#stream ul', 0 )->find( 'a.active', 0 )->title ) ),
 			'episode_id'	 => intval( $first_unseen->{'data-episode-id'} ),
 			'episode' 		 => strip_tags( trim( $first_unseen->find( 'td', 0 )->find( 'a', 0 )->plaintext ) ),
-			'title_german'   => strip_tags( trim( $first_unseen->find( '.seasonEpisodeTitle a strong', 0 )->plaintext ) ),
-			'title_original' => strip_tags( trim( $first_unseen->find( '.seasonEpisodeTitle a span', 0 )->plaintext ) ),
+			'title_german'   => isset( $first_unseen->find( '.seasonEpisodeTitle a strong', 0 )->plaintext ) ? strip_tags( trim( $first_unseen->find( '.seasonEpisodeTitle a strong', 0 )->plaintext ) ) : '',
+			'title_original' => isset( $first_unseen->find( '.seasonEpisodeTitle a span', 0 )->plaintext ) ? strip_tags( trim( $first_unseen->find( '.seasonEpisodeTitle a span', 0 )->plaintext ) ) : '',
 			'url' 	  		 => strip_tags( $first_unseen->find( '.seasonEpisodeTitle a', 0 )->href ),
 		];
 
