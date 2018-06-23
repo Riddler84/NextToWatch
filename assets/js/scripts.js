@@ -93,6 +93,7 @@ jQuery(function ($) {
 	$(document).ajaxStop(function () {
 		updateProgressBar(100);
 		$('.cssProgress').delay(800).fadeOut('slow');
+		$('.search > input').prop('disabled', false);
 	});
 
 

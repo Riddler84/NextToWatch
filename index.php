@@ -68,7 +68,7 @@ endif;
 				<div class="show-filter">
 
 					<div class="search">
-						<input type="text" placeholder="Titel eingeben">
+						<input type="text" placeholder="Titel eingeben" disabled>
 					</div>
 
 					<!-- <b>&nbsp;|&nbsp;</b>

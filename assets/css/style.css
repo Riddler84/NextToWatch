@@ -194,6 +194,11 @@ span.badge {
 	border: 1px solid rgba(0, 0, 0, 0.25);
 	background-color: #F5F5F5;
 	font-size: 24px;
+	transition: all .4s ease;
+}
+
+.show-filter .search input:disabled {
+	opacity: 0.35;
 }
 
 .show-filter .lang {
