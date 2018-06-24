@@ -174,12 +174,6 @@ span.badge {
 	margin: 15px 0 15px 0;
 }
 
-.show-episode .show-title {
-	/* display: flex;
-	flex-wrap: wrap;
-	align-items: center; */
-}
-
 .show-episode .show-title a {
 	text-decoration: none;
 	transition: all .2s ease;
