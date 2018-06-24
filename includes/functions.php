@@ -35,9 +35,10 @@ function do_login( string $email, string $pwd )
 	unset( $ch );
 
 	$base_url = sprintf(
-		"%s://%s",
+		"%s://%s%s",
 		isset( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http',
-		$_SERVER['SERVER_NAME']
+		$_SERVER['SERVER_NAME'],
+		explode( '?', $_SERVER['REQUEST_URI'], 2 )[0]
 	);
 
 	header( 'Location: ' . $base_url );
@@ -53,9 +54,10 @@ function do_logout()
 	unlink( ROOT_PATH . "/tmp/cookies.txt" );
 
 	$base_url = sprintf(
-		"%s://%s",
+		"%s://%s%s",
 		isset( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http',
-		$_SERVER['SERVER_NAME']
+		$_SERVER['SERVER_NAME'],
+		explode( '?', $_SERVER['REQUEST_URI'], 2 )[0]
 	);
 
 	header( 'Location: ' . $base_url );
