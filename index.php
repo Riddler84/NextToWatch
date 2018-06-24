@@ -65,6 +65,11 @@ endif;
 
 			<main class="container">
 
+				<div class="stats">
+					<div><small style="font-size:small;">Eingeloggt als <b><?php echo $site_data->username ?></b> (<a href="?logout">Ausloggen</a>)</small></div>
+					<div><small>Abonnierte Serien:</small> <span class="badge"><?php echo count( $shows ); ?></span></div>
+				</div>
+
 				<div class="show-filter">
 
 					<div class="search">

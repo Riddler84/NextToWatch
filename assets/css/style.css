@@ -18,9 +18,13 @@ header {
 header > .container {
 	display: flex;
 	height: 80px;
-	justify-content: space-between;
+	justify-content: center;
 	align-items: center;
 	color: #fff;
+}
+
+header > .container > .stats {
+	display: none;
 }
 
 header > .container > .logo {
@@ -28,13 +32,20 @@ header > .container > .logo {
 	font-weight: bold;
 }
 
-header > .container > .stats > div:first-child {
+header > .container > .stats > div:first-child,
+main .stats > div:first-child {
 	margin-bottom: 5px;
 }
 
-header > .container > .stats .badge {
+header > .container > .stats .badge,
+main .stats .badge {
 	background-color: #9CCC65;
     color: rgba(0, 0, 0, 0.75);
+}
+
+main .stats {
+	text-align: center;
+	margin-top: 20px;
 }
 
 a.link-contrast {
@@ -48,6 +59,7 @@ a.link-contrast:hover {
 .container {
 	max-width: 1600px;
 	margin: auto;
+	padding: 0 10px;
 	position: relative;
 }
 
@@ -99,6 +111,18 @@ a.link-contrast:hover {
 		grid-template-columns: calc(50% - 7.5px) calc(50% - 7.5px);
 		grid-column-gap: 15px;
 		grid-row-gap: 15px;
+	}
+
+	main .stats {
+		display: none;
+	}
+
+	header > .container .stats {
+		display: initial;
+	}
+
+	header > .container {
+		justify-content: space-between;
 	}
 }
 
