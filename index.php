@@ -76,24 +76,24 @@ endif;
 						<input type="text" placeholder="Titel eingeben" disabled>
 					</div>
 
-					<!-- <b>&nbsp;|&nbsp;</b>
+					<b>&nbsp;|&nbsp;</b>
 
 					<div class="lang">
 						<label for="lang-deen">
-							<input type="checkbox" id="lang-deen" data-lang="deen" hidden>
+							<input type="checkbox" id="lang-deen" data-lang="deen" disabled hidden>
 							<img src="images/deen.png" alt="">
 						</label>
 
-						<label for="lang-de" class="active">
-							<input type="checkbox" id="lang-de" data-lang="de" checked hidden>
+						<label for="lang-de">
+							<input type="checkbox" id="lang-de" data-lang="de" disabled hidden>
 							<img src="images/de.png" alt="">
 						</label>
 
 						<label for="lang-en">
-							<input type="checkbox" id="lang-en" data-lang="en" hidden>
+							<input type="checkbox" id="lang-en" data-lang="en" disabled hidden>
 							<img src="images/en.png" alt="">
 						</label>
-					</div> -->
+					</div>
 				</div>
 
 				<div class="cssProgress">
@@ -119,7 +119,7 @@ endif;
 							</div>
 							
 							<div>
-								<h2><?php echo $show['title']; ?></h2>
+								<h2 data-title="<?php echo $show['title']; ?>"><?php echo $show['title']; ?></h2>
 								<div class="show-episode" data-show-url="<?php echo $show['url'] ?>"></div>
 							</div>
 

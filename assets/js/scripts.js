@@ -72,6 +72,9 @@ jQuery(function ($) {
 		});
 
 		$gridItems.detach().appendTo($grid);
+
+		// last seen at first
+		$('.grid-item.lastseen').detach().prependTo($grid);
 	}
 
 
@@ -93,7 +96,8 @@ jQuery(function ($) {
 	$(document).ajaxStop(function () {
 		updateProgressBar(100);
 		$('.cssProgress').delay(800).fadeOut('slow');
-		$('.search > input').prop('disabled', false);
+		$('.show-filter > .search > input').prop('disabled', false);
+		$('.show-filter > .lang input').prop('disabled', false);
 	});
 
 
@@ -103,9 +107,17 @@ jQuery(function ($) {
 	});
 
 
+	// add class to last seen show
+	$('.grid-container > .grid-item h2[data-title*="' + localStorage['last_seen_show'] + '"]').closest('.grid-item').addClass('lastseen');
+
+
 	// filter title
 	$('.show-filter .search').on('keyup', 'input', function() {
 		var searchTerm = $(this).val();
+
+		// uncheck language inputs
+		$('.show-filter .lang input').prop('checked', false);
+		$('.show-filter .lang label').removeClass('active');
 
 		$('.grid-container .grid-item').each(function() {
 			if ( $(this).find('h2').text().search( new RegExp( searchTerm, "i" ) ) < 0 ) {
@@ -118,37 +130,49 @@ jQuery(function ($) {
 
 
 	// language checkboxes
-	// $('.show-filter .lang').on('change', 'label input', function() {
-	// 	if( $(this).is(':checked') ) {
-	// 		$(this).closest('label').addClass('active');
-	// 	} else {
-	// 		$(this).closest('label').removeClass('active');
-	// 	};
-	// });
+	$('.show-filter .lang').on('change', 'label input', function() {
+		if( $(this).is(':checked') ) {
+			$(this).closest('label').addClass('active');
+		} else {
+			$(this).closest('label').removeClass('active');
+		};
+	});
 
 
 	// filter lang
-	// $('.show-filter .lang').on('change', 'input', function() {
-	// 	var langs = $(this).closest('.lang');
-	// 	var activeLanguages = [];
+	$('.show-filter .lang').on('change', 'input', function() {
+		var langs = $(this).closest('.lang');
+		var gridItems = $('.grid-container .grid-item');
+		var gridItemsDEEN = gridItems.find('.show-lang img[src*="deen.png"]');
+		var gridItemsDE = gridItems.find('.show-lang img[src*="de.png"]');
+		var gridItemsEN = gridItems.find('.show-lang img[src*="en.png"]');
 
-	// 	( langs.find('#lang-deen').prop('checked') ) ? activeLanguages.push('deen') : null;
-	// 	( langs.find('#lang-de').prop('checked') ) ? activeLanguages.push('de') : null;
-	// 	( langs.find('#lang-en').prop('checked') ) ? activeLanguages.push('en') : null;
+		// clear search input
+		$('.show-filter .search input').val('');
 
-	// 	$('.grid-container .grid-item').each(function() {
-	// 		var gridItem = $(this);
+		gridItems.hide();
 
-	// 		gridItem.find('.show-lang img').each(function() {
-	// 			var lang = $(this).attr('src').split('/').pop().split('.')[0];
+		if ( langs.find('#lang-deen').prop('checked') ) {
+			gridItemsDEEN.each(function() {
+				$(this).closest('.grid-item').show();
+			});
+		}
 
-	// 			if ( $.inArray( lang, activeLanguages ) > -1 ) {
-	// 				gridItem.show();
-	// 			} else {
-	// 				gridItem.hide();
-	// 			}
-	// 		});
-	// 	});
-	// });
+		if ( langs.find('#lang-de').prop('checked') ) {
+			gridItemsDE.each(function() {
+				$(this).closest('.grid-item').show();
+			});
+		}
+
+		if ( langs.find('#lang-en').prop('checked') ) {
+			gridItemsEN.each(function() {
+				$(this).closest('.grid-item').show();
+			});
+		}
+
+		if ( ! langs.find('#lang-deen').prop('checked') && ! langs.find('#lang-de').prop('checked') && ! langs.find('#lang-en').prop('checked') ) {
+			gridItems.show();
+		}
+	});
 
 });
