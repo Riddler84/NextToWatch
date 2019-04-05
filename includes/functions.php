@@ -13,6 +13,8 @@ include ROOT_PATH . '/lib/simple_html_dom.php';
  */
 function do_login( string $email, string $pwd ) 
 {
+	setcookie( "ntw_user", sha1( $email ), strtotime( '+365 days' ) );
+
 	$post_fields = http_build_query([
 		'email'    => strip_tags( trim( $email ) ),
 		'password' => strip_tags( trim( $pwd ) )
@@ -20,7 +22,7 @@ function do_login( string $email, string $pwd )
 
 	$ch = curl_init();
 
-	curl_setopt( $ch, CURLOPT_COOKIEJAR, ROOT_PATH . "/tmp/cookies.txt" );
+	curl_setopt( $ch, CURLOPT_COOKIEJAR, ROOT_PATH . "/tmp/cookies_" . $_COOKIE["ntw_user"] . ".txt" );
 	curl_setopt( $ch, CURLOPT_URL, "https://s.to/login" );
 	curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
 	curl_setopt( $ch, CURLOPT_POST, 1 );
@@ -51,7 +53,7 @@ function do_login( string $email, string $pwd )
  */
 function do_logout() 
 {
-	unlink( ROOT_PATH . "/tmp/cookies.txt" );
+	unlink( ROOT_PATH . "/tmp/cookies_" . $_COOKIE["ntw_user"] . ".txt" );
 
 	$base_url = sprintf(
 		"%s://%s%s",
@@ -75,7 +77,7 @@ function get_site_html( string $url = 'https://s.to/' )
 	$ch = curl_init();
 
 	curl_setopt( $ch, CURLOPT_URL, $url );
-	curl_setopt( $ch, CURLOPT_COOKIEFILE, ROOT_PATH . "/tmp/cookies.txt" );
+	curl_setopt( $ch, CURLOPT_COOKIEFILE, ROOT_PATH . "/tmp/cookies_" . $_COOKIE["ntw_user"] . ".txt" );
 	curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
 	curl_setopt( $ch, CURLOPT_USERAGENT, $_SERVER["HTTP_USER_AGENT"] );
 
