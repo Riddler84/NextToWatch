@@ -9,32 +9,11 @@ include ROOT_PATH . '/lib/simple_html_dom.php';
 
 
 /**
- * Do remote login to s.to and saves a cookie file
+ * Do login via session id and save a cookie file
  */
-function do_login( string $email, string $pwd ) 
+function do_login( string $sstosession ) 
 {
-	setcookie( "ntw_user", sha1( $email ), strtotime( '+365 days' ) );
-
-	$post_fields = http_build_query([
-		'email'    => strip_tags( trim( $email ) ),
-		'password' => strip_tags( trim( $pwd ) )
-	]);
-
-	$ch = curl_init();
-
-	curl_setopt( $ch, CURLOPT_COOKIEJAR, ROOT_PATH . "/tmp/cookies_" . $_COOKIE["ntw_user"] . ".txt" );
-	curl_setopt( $ch, CURLOPT_URL, "https://s.to/login" );
-	curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
-	curl_setopt( $ch, CURLOPT_POST, 1 );
-	curl_setopt( $ch, CURLOPT_POSTFIELDS, $post_fields );
-	curl_setopt( $ch, CURLOPT_USERAGENT, $_SERVER["HTTP_USER_AGENT"] );
-
-	ob_start();
-	curl_exec( $ch );
-	ob_end_clean();
-
-	curl_close( $ch );
-	unset( $ch );
+	setcookie( "ntw_sstosession", $sstosession, strtotime( '+365 days' ) );
 
 	$base_url = sprintf(
 		"%s://%s%s",
@@ -49,11 +28,51 @@ function do_login( string $email, string $pwd )
 
 
 /**
+ * Do remote login to s.to and saves a cookie file
+ */
+// function do_login( string $email, string $pwd ) 
+// {
+// 	setcookie( "ntw_user", sha1( $email ), strtotime( '+365 days' ) );
+
+// 	$post_fields = http_build_query([
+// 		'email'    => strip_tags( trim( $email ) ),
+// 		'password' => strip_tags( trim( $pwd ) )
+// 	]);
+
+// 	$ch = curl_init();
+
+// 	curl_setopt( $ch, CURLOPT_COOKIEJAR, ROOT_PATH . "/tmp/cookies_" . $_COOKIE["ntw_user"] . ".txt" );
+// 	curl_setopt( $ch, CURLOPT_URL, "https://s.to/login" );
+// 	curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
+// 	curl_setopt( $ch, CURLOPT_POST, 1 );
+// 	curl_setopt( $ch, CURLOPT_POSTFIELDS, $post_fields );
+// 	curl_setopt( $ch, CURLOPT_USERAGENT, $_SERVER["HTTP_USER_AGENT"] );
+
+// 	ob_start();
+// 	curl_exec( $ch );
+// 	ob_end_clean();
+
+// 	curl_close( $ch );
+// 	unset( $ch );
+
+// 	$base_url = sprintf(
+// 		"%s://%s%s",
+// 		isset( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http',
+// 		$_SERVER['SERVER_NAME'],
+// 		explode( '?', $_SERVER['REQUEST_URI'], 2 )[0]
+// 	);
+
+// 	header( 'Location: ' . $base_url );
+// 	exit;
+// }
+
+
+/**
  * Do logout by deleting the cookie file
  */
 function do_logout() 
 {
-	unlink( ROOT_PATH . "/tmp/cookies_" . $_COOKIE["ntw_user"] . ".txt" );
+	setcookie( "ntw_sstosession", "", time() - 3600 );
 
 	$base_url = sprintf(
 		"%s://%s%s",
@@ -77,9 +96,13 @@ function get_site_html( string $url = 'https://s.to/' )
 	$ch = curl_init();
 
 	curl_setopt( $ch, CURLOPT_URL, $url );
-	curl_setopt( $ch, CURLOPT_COOKIEFILE, ROOT_PATH . "/tmp/cookies_" . $_COOKIE["ntw_user"] . ".txt" );
 	curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
 	curl_setopt( $ch, CURLOPT_USERAGENT, $_SERVER["HTTP_USER_AGENT"] );
+
+	if ( isset( $_COOKIE['ntw_sstosession'] ) ) 
+	{
+		curl_setopt( $ch, CURLOPT_COOKIE, 'SSTOSESSION=' . $_COOKIE['ntw_sstosession'] );
+	}
 
 	$html = curl_exec( $ch );
 

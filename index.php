@@ -23,7 +23,7 @@ endif;
 
 // login action
 if ( isset( $_POST['submit'] ) && $_POST['submit'] == 'login' ) :
-	do_login( $_POST['email'], $_POST['pwd'] );
+	do_login( $_POST['sstosession'] );
 endif;
 ?>
 
@@ -45,6 +45,8 @@ endif;
 
 		<?php 
 		$site_data = get_site_data();
+
+		// print_r( get_site_html( 'https://s.to' ) );
 
 		if ( $site_data->loggedin === 1 ) :
 		?>
@@ -138,13 +140,19 @@ endif;
 		?>
 
 			<div id="login-form">
-				<p style="text-align:center; margin-top:0; font-weight:bold;">Deine s.to Zugangsdaten</p>
+				<p style="text-align:center; margin-top:0; font-weight:bold;">Deine s.to Session ID</p>
 
 				<form action="" method="post">
-					<input type="email" name="email" placeholder="E-Mail" required>
-					<input type="password" name="pwd" placeholder="Passwort" required>
+					<!-- <input type="email" name="email" placeholder="E-Mail">
+					<input type="password" name="pwd" placeholder="Passwort">
+					<div style="text-align:center; font-weight:bold; font-size:10px; margin-bottom:10px;">- oder -</div> -->
+					<input type="text" name="sstosession" placeholder="SSTOSESSION">
 					<button type="submit" name="submit" value="login">Einloggen</button>
 				</form>
+
+				<p style="font-size: 12px; margin-top:50px;">
+					Um die Session ID zu erhalten, auf s.to einloggen und anschließend in der Adressleiste auf das Schloss neben der URL klicken. Dann den Menüpunkt Cookies auswählen. Im sich öffnenden Fenster s.to -> Cookies -> SSTOSESSION wählen und die Zeichenfolge aus der Spalte Inhalt kopieren.
+				</p>
 			</div>
 		
 		<?php
