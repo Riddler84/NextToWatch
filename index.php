@@ -112,7 +112,7 @@ endif;
 					foreach ( $shows as $show ) :
 					?>
 
-						<div class="grid-item" style="display:none;">
+						<div class="grid-item">
 
 							<div class="show-cover">
 								<a href="http://s.to<?php echo $show['url']; ?>" target="_blank">
@@ -120,9 +120,9 @@ endif;
 								</a>
 							</div>
 							
-							<div>
-								<h2 data-title="<?php echo $show['title']; ?>"><?php echo $show['title']; ?></h2>
-								<div class="show-episode" data-show-url="<?php echo $show['url'] ?>"></div>
+							<div class="show-content">
+								<div class="show-title" data-title="<?php echo $show['title']; ?>"><?php echo $show['title']; ?></div>
+								<div class="show-episode" data-show-url="<?php echo $show['url'] ?>"><img src="images/loader.gif"></div>
 							</div>
 
 						</div>

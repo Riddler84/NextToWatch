@@ -20,20 +20,22 @@ jQuery(function ($) {
 			type: 'post',
 			dataType: 'json',
 			beforeSend: function () {
-				element.html('<img src="images/loader.gif">');
+				// element.html('<img src="images/loader.gif">');
 			},
 			success: function (output) {
 				successCount++;
 				if (output.info == 'nothing') {
 					// gridItemsCount--;
-					gridItem.remove();
+					// gridItem.remove();
+					element.html('<span style="color:red; font-size:11px;">Keine ungesehene Episode</span>');
 				} else {
-					gridItem.fadeIn('slow', function() {
-						updateProgressBar();
-					});
+					updateProgressBar();
+					// gridItem.fadeIn('slow', function() {
+					// 	updateProgressBar();
+					// });
 
 					if (output.info.title_german) {
-						var title = '<strong>' + output.info.title_german + '</strong>&nbsp;-&nbsp;' + output.info.title_original;
+						var title = output.info.title_german + '&nbsp;(' + output.info.title_original + ')';
 					} else {
 						var title = output.info.title_original;
 					}
@@ -45,7 +47,7 @@ jQuery(function ($) {
 
 					element.html(
 						'<div class="show-meta">' + '<span class="badge">' + output.info.season + '</span>' + '&nbsp;' + '<span class="badge">' + output.info.episode + '</span>' + '</div>' +
-						'<div class="show-title"><a href="https://s.to' + output.info.url + '" target="_blank">' + title + '</a></div>' +
+						'<div class="show-episode-title"><a href="https://s.to' + output.info.url + '" target="_blank">' + title + '</a></div>' +
 						'<div class="show-lang">' + lang + '</div>'
 					);
 

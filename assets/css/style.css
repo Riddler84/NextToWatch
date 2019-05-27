@@ -106,13 +106,6 @@ a.link-contrast:hover {
 }
 
 @media only screen and (min-width: 800px) {
-	.grid-container {
-		display: grid;
-		grid-template-columns: calc(50% - 7.5px) calc(50% - 7.5px);
-		grid-column-gap: 15px;
-		grid-row-gap: 15px;
-	}
-
 	main .stats {
 		display: none;
 	}
@@ -129,7 +122,7 @@ a.link-contrast:hover {
 @media only screen and (min-width: 1200px) {
 	.grid-container {
 		display: grid;
-		grid-template-columns: calc(33.33% - 10px) calc(33.33% - 10px) calc(33.33% - 10px);
+		grid-template-columns: calc(50% - 7.5px) calc(50% - 7.5px);
 		grid-column-gap: 15px;
 		grid-row-gap: 15px;
 	}
@@ -138,8 +131,7 @@ a.link-contrast:hover {
 .grid-item {
 	position: relative;
 	display: flex;
-	padding: 15px;
-	border-radius: 2px;
+	border-radius: 1px;
 	background-color: #F5F5F5;
 	box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.25);
 	transition: all .2s ease;
@@ -153,48 +145,62 @@ a.link-contrast:hover {
 	box-shadow: 0px 2px 5px 2px rgba(0, 0, 0, 0.25);
 }
 
-.grid-item h2 {
-	margin-top: 0;
+.grid-item .show-title {
+	font-weight: bold;
 }
 
-.show-cover {
-	margin-right: 25px;
+.show-cover > a {
+	display: block;
 }
 
-.show-cover img {
-	max-width: 135px;
-	height: auto;
+.show-cover > a > img {
+	display: block;
+	max-height: 85px;
+	width: auto;
+}
+
+.show-content {
+	padding: 8px 8px 8px 30px;
 }
 
 span.badge {
 	border-radius: 2px;
 	background-color: aquamarine;
-	padding: 4px 8px;
-	font-size: small;
+	padding: 2px 4px;
+	font-size: 10px;
 	font-weight: bold;
 }
 
-.show-episode .show-meta {
-	margin: 15px 0 15px 0;
+.show-episode {
+	display: flex;
 }
 
-.show-episode .show-title a {
+.show-episode > div:not(:first-child) {
+	margin-left: 15px;
+}
+
+.show-episode .show-meta {
+	/* margin: 15px 0 15px 0; */
+}
+
+.show-episode .show-episode-title a {
+	font-size: 13px;
 	text-decoration: none;
 	transition: all .2s ease;
 }
 
-.show-episode .show-title a:hover {
+.show-episode .show-episode-title a:hover {
 	color: red;
 }
 
 .show-episode .show-lang {
-	position: absolute;
+	/* position: absolute;
 	right: 15px;
-	bottom: 15px;
+	bottom: 15px; */
 }
 
 .show-episode .show-lang img {
-	max-height: 24px;
+	max-height: 13px;
 	width: auto;
 }
 
