@@ -140,29 +140,35 @@ function get_subscribed_shows()
 function get_first_unseen_episode( $url ) 
 {
 	$show_page = str_get_html( get_site_html( 'https://s.to' . $url ) );
+
+	// get general show data
+	$episode_data['show_info'] = [
+		'header_background' => str_replace( 'url(', 'url(https://s.to', $show_page->find( '.backdrop', 0 )->style ),
+	];
+
 	$first_season_episode = get_episode_data( $show_page );
 
 	if ( ! empty( $first_season_episode ) ) 
 	{
-		return json_encode( $first_season_episode );
+		return json_encode( array_merge( $episode_data, $first_season_episode ) );
 	}
 	else 
 	{
-		$first_incomplete_season_url = $show_page->find( '#stream', 0 )->find( 'ul', 0 )->find( 'a[!class]', 0 );
+		$first_incomplete_season_url = $show_page->find( '#stream ul a[!class]', 0 );
 		
-		if ( isset( $first_incomplete_season_url->href ) ) 
+		if ( ! empty( $first_incomplete_season_url->href ) ) 
 		{
 			$show_page = str_get_html( get_site_html( 'https://s.to' . $first_incomplete_season_url->href ) );
 			$other_season_episode = get_episode_data( $show_page );
 			
 			if ( ! empty( $other_season_episode ) ) 
 			{
-				return json_encode( $other_season_episode );
+				return json_encode( array_merge( $episode_data, $other_season_episode ) );
 			}
 		}
 	}
 
-	return json_encode( ['info' => 'nothing'] );
+	return json_encode( array_merge( $episode_data, ['episode_error' => 'no_unseen'] ) );
 }
 
 
@@ -171,24 +177,29 @@ function get_first_unseen_episode( $url )
  */
 function get_episode_data( $season_page ) 
 {
-	$first_unseen = $season_page->find( 'table.seasonEpisodesList tbody', 0 )->find( 'tr[class!=seen]', 0 );
+	$first_unseen = $season_page->find( 'table.seasonEpisodesList tbody tr[class!=seen] .seasonEpisodeTitle a', 0 );
 
 	$episode_data = [];
 
 	if ( is_object( $first_unseen ) ) 
 	{
-		$episode_data['info'] = [
-			'season' 		 => strip_tags( trim( $season_page->find( '#stream ul', 0 )->find( 'a.active', 0 )->title ) ),
-			'episode_id'	 => intval( $first_unseen->{'data-episode-id'} ),
-			'episode' 		 => strip_tags( trim( $first_unseen->find( 'td', 0 )->find( 'a', 0 )->plaintext ) ),
-			'title_german'   => isset( $first_unseen->find( '.seasonEpisodeTitle a strong', 0 )->plaintext ) ? strip_tags( trim( $first_unseen->find( '.seasonEpisodeTitle a strong', 0 )->plaintext ) ) : '',
-			'title_original' => isset( $first_unseen->find( '.seasonEpisodeTitle a span', 0 )->plaintext ) ? strip_tags( trim( $first_unseen->find( '.seasonEpisodeTitle a span', 0 )->plaintext ) ) : '',
-			'url' 	  		 => strip_tags( $first_unseen->find( '.seasonEpisodeTitle a', 0 )->href ),
+		$episode_page = str_get_html( get_site_html( 'https://s.to' . $first_unseen->href ) );
+
+		$episode_data['episode_info'] = [
+			'description' => empty( $episode_page->find( '.descriptionSpoiler', 0 )->plaintext ) ? '' : $episode_page->find( '.descriptionSpoiler', 0 )->plaintext,
+			'title_german' => empty( $episode_page->find( '.episodeGermanTitel', 0 )->plaintext ) ? '' : $episode_page->find( '.episodeGermanTitel', 0 )->plaintext,
+			'title_english' => empty( $episode_page->find( '.episodeEnglishTitel', 0 )->plaintext ) ? '' : $episode_page->find( '.episodeEnglishTitel', 0 )->plaintext,
+			'url' => $first_unseen->href,
+			'current_season' => empty( $episode_page->find( '.hosterSiteTitle', 0 )->{'data-season'} ) ? '' : $episode_page->find( '.hosterSiteTitle', 0 )->{'data-season'},
+			'current_episode' => empty( $episode_page->find( '.hosterSiteTitle', 0 )->{'data-episode'} ) ? '' : $episode_page->find( '.hosterSiteTitle', 0 )->{'data-episode'},
+			'current_episode_id' => empty( $episode_page->find( '.hosterSiteTitle', 0 )->{'data-episode-id'} ) ? '' : $episode_page->find( '.hosterSiteTitle', 0 )->{'data-episode-id'},
+			'seasons_count' => empty( $episode_page->find( '#stream ul', 0 )->find( 'a' ) ) ? '' : count( $episode_page->find( '#stream ul', 0 )->find( 'a' ) ),
+			'episodes_count' => empty( $episode_page->find( '#stream ul', 1 )->find( 'a' ) ) ? '' : count( $episode_page->find( '#stream ul', 1 )->find( 'a' ) ),
 		];
 
-		foreach ( $first_unseen->find( '.editFunctions img' ) as $lang ) 
+		foreach ( $episode_page->find( '.changeLanguageBox img' ) as $lang ) 
 		{
-			$episode_data['lang'][] = [
+			$episode_data['episode_lang'][] = [
 				'flag' => $lang->src,
 				'name' => $lang->title,
 			];
@@ -198,7 +209,7 @@ function get_episode_data( $season_page )
 	}
 	else
 	{
-		return false;
+		return array();
 	}
 }
 

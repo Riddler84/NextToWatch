@@ -3,11 +3,10 @@ jQuery(function ($) {
 	var gridItemsCount = $('.grid-item').length;
 	var successCount   = 0;
 
-	$('.grid-item .show-episode').each(function () {
+	$('.grid-item').each(function () {
 
-		var element = $(this);
-		var gridItem = $(this).closest('.grid-item');
-		var data_url = element.attr('data-show-url');
+		var item = $(this);
+		var data_url = item.attr('data-show-url');
 
 		$.ajax({
 			url: 'index.php',
@@ -20,41 +19,83 @@ jQuery(function ($) {
 			type: 'post',
 			dataType: 'json',
 			beforeSend: function () {
-				// element.html('<img src="images/loader.gif">');
+				// item.html('<img src="images/loader.gif">');
 			},
 			success: function (output) {
 				successCount++;
-				if (output.info == 'nothing') {
-					// gridItemsCount--;
-					// gridItem.remove();
-					element.html('<span style="color:red; font-size:11px;">Keine ungesehene Episode</span>');
-				} else {
-					updateProgressBar();
-					// gridItem.fadeIn('slow', function() {
-					// 	updateProgressBar();
-					// });
+				updateProgressBar();
 
-					if (output.info.title_german) {
-						var title = output.info.title_german + '&nbsp;(' + output.info.title_original + ')';
-					} else {
-						var title = output.info.title_original;
+				console.log(output);
+
+				if (output.episode_error == 'no_unseen') {
+					item.find('.description').html('<span style="color:red; font-weight: bold;">Keine ungesehene Episode</span>');
+				}
+
+				if (output.show_info) {
+					if (output.show_info.header_background) {
+						item.find('.grid-item-header').attr('style', output.show_info.header_background);
+					}
+				}
+
+				if (output.episode_info) {
+					if (output.episode_info.title_german) {
+						item.find('.title-container > .episode-title').text(output.episode_info.title_german);
+					} else if (output.episode_info.title_english) {
+						item.find('.title-container > .episode-title').text(output.episode_info.title_english);
 					}
 
+					if (output.episode_info.description) {
+						item.find('.description').text(output.episode_info.description);
+					} else {
+						item.find('.description').text('Keine Beschreibung vorhanden');
+					}
+
+					if (output.episode_info.current_season == 0) {
+						item.find('.seasons-progress').show().prepend('<span>Filme</span>');
+						item.find('.seasons-progress .progress-current').css('width', '100%');
+					} else if (output.episode_info.current_season && output.episode_info.seasons_count) {
+						item.find('.seasons-progress').show().prepend('<span>Staffel ' + output.episode_info.current_season + '/' + output.episode_info.seasons_count + '</span>');
+
+						var percentage_finished = ((output.episode_info.current_season - 1) * 100) / output.episode_info.seasons_count;
+						item.find('.seasons-progress .progress-finished').css('width', percentage_finished + '%');
+
+						var remaining_seasons = (output.episode_info.seasons_count - (output.episode_info.current_season - 1));
+						var percentage_current = (100 - percentage_finished ) / remaining_seasons;
+						item.find('.seasons-progress .progress-current').css('width', percentage_current + '%');
+					}
+
+					if (output.episode_info.current_episode && output.episode_info.episodes_count) {
+						item.find('.episodes-progress').show().prepend('<span>Episode ' + output.episode_info.current_episode + '/' + output.episode_info.episodes_count + '</span>');
+
+						var percentage_finished = ((output.episode_info.current_episode - 1) * 100) / output.episode_info.episodes_count;
+						item.find('.episodes-progress .progress-finished').css('width', percentage_finished + '%');
+
+						var remaining_episodes = (output.episode_info.episodes_count - (output.episode_info.current_episode - 1));
+						var percentage_current = (100 - percentage_finished ) / remaining_episodes;
+						item.find('.episodes-progress .progress-current').css('width', percentage_current + '%');
+					}
+
+					if (output.episode_info.url) {
+						item.find('.grid-item-header .overlay-link').attr('href', 'https://s.to' + output.episode_info.url);
+					} else {
+						item.find('.grid-item-header .overlay-link').removeAttr('href');
+					}
+
+					if (output.episode_info.current_episode_id) {
+						item.attr('data-episode-id', output.episode_info.current_episode_id);
+					}
+				}
+
+				if (output.episode_lang) {
 					var lang = '';
-					$(output.lang).each(function () {
+					$(output.episode_lang).each(function () {
 						lang = lang + '<img src="https://s.to' + this.flag + '" title="' + this.name + '">&nbsp;';
 					});
-
-					element.html(
-						'<div class="show-meta">' + '<span class="badge">' + output.info.season + '</span>' + '&nbsp;' + '<span class="badge">' + output.info.episode + '</span>' + '</div>' +
-						'<div class="show-episode-title"><a href="https://s.to' + output.info.url + '" target="_blank">' + title + '</a></div>' +
-						'<div class="show-lang">' + lang + '</div>'
-					);
-
-					gridItem.attr('data-episode-id', output.info.episode_id);
-
-					sortGrid();
+					item.find('.languages').html(lang);
 				}
+
+				sortGrid();
+				resizeAllGridItems();
 			},
 			error: function (xhr, text_status) {
 				console.log(xhr);
@@ -104,13 +145,13 @@ jQuery(function ($) {
 
 
 	// store last seen show when clicking an episode
-	$('.grid-container').on('click', '.grid-item .show-title', function() {
-		localStorage.setItem("last_seen_show", $(this).closest('.grid-item').find('h2').html());
+	$('.grid-container').on('click', '.grid-item .overlay-link', function() {
+		localStorage.setItem("last_seen_show", $(this).closest('.grid-item').find('.show-title').text());
 	});
 
 
 	// add class to last seen show
-	$('.grid-container > .grid-item h2[data-title*="' + localStorage['last_seen_show'] + '"]').closest('.grid-item').addClass('lastseen');
+	$('.grid-container > .grid-item[data-title*="' + localStorage['last_seen_show'] + '"]').addClass('lastseen');
 
 
 	// filter title
@@ -122,7 +163,7 @@ jQuery(function ($) {
 		$('.show-filter .lang label').removeClass('active');
 
 		$('.grid-container .grid-item').each(function() {
-			if ( $(this).find('h2').text().search( new RegExp( searchTerm, "i" ) ) < 0 ) {
+			if ( $(this).find('.show-title').text().search( new RegExp( searchTerm, "i" ) ) < 0 ) {
 				$(this).fadeOut();
 			} else {
 				$(this).fadeIn();
@@ -145,9 +186,9 @@ jQuery(function ($) {
 	$('.show-filter .lang').on('change', 'input', function() {
 		var langs = $(this).closest('.lang');
 		var gridItems = $('.grid-container .grid-item');
-		var gridItemsDEEN = gridItems.find('.show-lang img[src*="deen.png"]');
-		var gridItemsDE = gridItems.find('.show-lang img[src*="de.png"]');
-		var gridItemsEN = gridItems.find('.show-lang img[src*="en.png"]');
+		var gridItemsDEEN = gridItems.find('.languages img[src*="deen.png"]');
+		var gridItemsDE = gridItems.find('.languages img[src*="de.png"]');
+		var gridItemsEN = gridItems.find('.languages img[src*="en.png"]');
 
 		// clear search input
 		$('.show-filter .search input').val('');
@@ -176,5 +217,35 @@ jQuery(function ($) {
 			gridItems.show();
 		}
 	});
+
+
+	// masonry grid
+	function resizeGridItem(item) {
+		grid = document.getElementsByClassName("grid-container")[0];
+		rowHeight = parseInt(window.getComputedStyle(grid).getPropertyValue('grid-auto-rows'));
+		rowGap = parseInt(window.getComputedStyle(grid).getPropertyValue('grid-row-gap'));
+		rowSpan = Math.ceil((item.querySelector('.content').getBoundingClientRect().height + rowGap) / (rowHeight + rowGap));
+		item.style.gridRowEnd = "span " + rowSpan;
+	}
+
+	function resizeAllGridItems() {
+		allItems = document.getElementsByClassName("grid-item");
+		for (x = 0; x < allItems.length; x++) {
+			resizeGridItem(allItems[x]);
+		}
+	}
+
+	// function resizeInstance(instance) {
+	// 	item = instance.elements[0];
+	// 	resizeGridItem(item);
+	// }
+
+	// window.onload = resizeAllGridItems();
+	window.addEventListener("resize", resizeAllGridItems);
+
+	// allItems = document.getElementsByClassName("item");
+	// for (x = 0; x < allItems.length; x++) {
+	// 	imagesLoaded(allItems[x], resizeInstance);
+	// }
 
 });

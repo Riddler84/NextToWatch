@@ -8,10 +8,11 @@ body {
 	margin: 0;
 	padding: 0;
 	margin-bottom: 30px;
+	background-color: #eceff1;
 }
 
 header {
-	background-color: #2196F3;
+	background-color: #009688;
     box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.25);
 }
 
@@ -35,12 +36,6 @@ header > .container > .logo {
 header > .container > .stats > div:first-child,
 main .stats > div:first-child {
 	margin-bottom: 5px;
-}
-
-header > .container > .stats .badge,
-main .stats .badge {
-	background-color: #9CCC65;
-    color: rgba(0, 0, 0, 0.75);
 }
 
 main .stats {
@@ -98,13 +93,6 @@ a.link-contrast:hover {
 	color: #fff;
 }
 
-.grid-container {
-	display: grid;
-	grid-template-columns: auto;
-	grid-column-gap: 15px;
-	grid-row-gap: 15px;
-}
-
 @media only screen and (min-width: 800px) {
 	main .stats {
 		display: none;
@@ -119,90 +107,162 @@ a.link-contrast:hover {
 	}
 }
 
-@media only screen and (min-width: 1200px) {
-	.grid-container {
-		display: grid;
-		grid-template-columns: calc(50% - 7.5px) calc(50% - 7.5px);
-		grid-column-gap: 15px;
-		grid-row-gap: 15px;
-	}
+.grid-container {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(450px,1fr));
+	grid-gap: 30px;
+	grid-auto-rows: 10px;
 }
 
 .grid-item {
 	position: relative;
-	display: flex;
-	border-radius: 1px;
-	background-color: #F5F5F5;
-	box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.25);
-	transition: all .2s ease;
-}
-
-.grid-item.lastseen {
-	background-color: rgba(255, 152, 0, 0.6);
+    border-radius: 4px;
+    background-color: #fff;
+    box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.25);
+    transition: all .2s ease;
+    border: 1px solid #607D8B;
+    overflow: hidden;
 }
 
 .grid-item:hover {
 	box-shadow: 0px 2px 5px 2px rgba(0, 0, 0, 0.25);
 }
 
-.grid-item .show-title {
-	font-weight: bold;
+.grid-item.lastseen {
+	/* box-shadow: 0 0 0 2px #009688; */
 }
 
-.show-cover > a {
+.grid-item.lastseen:hover {
+	/* box-shadow: 0px 2px 5px 2px #009688; */
+}
+
+.grid-item-header {
+	position: relative;
+	height: 200px;
+	background-size: cover;
+	padding: 0px 25px;
+}
+
+.grid-item-body {
+	padding: 15px 25px;
+}
+
+.grid-item-footer {
+
+}
+
+.grid-item .overlay-bg {
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background: linear-gradient(to bottom, rgba(0,0,0,0) 0%,rgba(0,0,0,0.75) 100%);
+	z-index: 1;
+}
+
+.grid-item .overlay-link {
 	display: block;
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	z-index: 3;
 }
 
-.show-cover > a > img {
+.grid-item .cover > a {
 	display: block;
-	max-height: 85px;
-	width: auto;
+	position: absolute;
+	top: 90px;
+	left: 25px;
+	z-index: 4;
 }
 
-.show-content {
-	padding: 8px 8px 8px 30px;
+.grid-item .cover > a > img {
+	display: block;
+	height: 200px;
+	width: 135px;
+	box-shadow: 0px 0px 4px 1px rgba(0, 0, 0, 0.35);
 }
 
-span.badge {
-	border-radius: 2px;
-	background-color: aquamarine;
-	padding: 2px 4px;
-	font-size: 10px;
+.grid-item .title-container {
+	position: relative;
+	padding: 100px 25px 0 160px;
+	z-index: 2;
+}
+
+.grid-item .title-container > .show-title {
 	font-weight: bold;
+	font-size: 24px;
+	color: #fff;
+	line-height: 1.2;
+	text-shadow: 1px 1px 0px black;
 }
 
-.show-episode {
+.grid-item .title-container > .episode-title {
+	margin-top: 5px;
+	font-size: 18px;
+	color: #f44336;
+	text-shadow: 1px 1px 0px black;
+}
+
+.grid-item .column {
 	display: flex;
 }
 
-.show-episode > div:not(:first-child) {
-	margin-left: 15px;
+.grid-item .languages {
+	min-width: 135px;
+	padding-top: 100px;
+	text-align: center;
 }
 
-.show-episode .show-meta {
-	/* margin: 15px 0 15px 0; */
+.grid-item .description-container {
+	padding-left: 25px;
 }
 
-.show-episode .show-episode-title a {
-	font-size: 13px;
-	text-decoration: none;
-	transition: all .2s ease;
+.grid-item .seasons-progress:not(:empty),
+.grid-item .episodes-progress:not(:empty) {
+	position: relative;
+	font-size: 11px;
+    border: 1px solid rgba(0, 0, 0, 0.25);
+    border-radius: 2px;
+    padding: 4px 8px;
+    margin-right: 5px;
+    background: #FFC107;
 }
 
-.show-episode .show-episode-title a:hover {
-	color: red;
+.grid-item .seasons-progress > .progress,
+.grid-item .episodes-progress > .progress {
+	position: absolute;
+    bottom: 0;
+    left: 0;
+	right: 0;
+	display: flex;
+    width: 100%;
+    height: 2px;
+    background: #ffe082;
 }
 
-.show-episode .show-lang {
-	/* position: absolute;
-	right: 15px;
-	bottom: 15px; */
+.grid-item .seasons-progress > .progress > .progress-finished,
+.grid-item .episodes-progress > .progress > .progress-finished {
+	width: 0;
+    height: 2px;
+    background: #8BC34A;
 }
 
-.show-episode .show-lang img {
-	max-height: 13px;
-	width: auto;
+.grid-item .seasons-progress > .progress > .progress-current,
+.grid-item .episodes-progress > .progress > .progress-current {
+	width: 0;
+    height: 2px;
+    background: #03A9F4;
 }
+
+.grid-item .description {
+	font-size: 12px;
+	color: #757575;
+}
+
 
 .show-filter {
 	margin: 50px 0;

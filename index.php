@@ -46,8 +46,6 @@ endif;
 		<?php 
 		$site_data = get_site_data();
 
-		// print_r( get_site_html( 'https://s.to' ) );
-
 		if ( $site_data->loggedin === 1 ) :
 		?>
 
@@ -112,17 +110,53 @@ endif;
 					foreach ( $shows as $show ) :
 					?>
 
-						<div class="grid-item">
+						<div class="grid-item" data-title="<?php echo $show['title']; ?>" data-show-url="<?php echo $show['url'] ?>">
 
-							<div class="show-cover">
-								<a href="http://s.to<?php echo $show['url']; ?>" target="_blank">
-									<img src="http://s.to<?php echo $show['image']; ?>" alt="<?php echo $show['title']; ?> - Cover">
-								</a>
-							</div>
-							
-							<div class="show-content">
-								<div class="show-title" data-title="<?php echo $show['title']; ?>"><?php echo $show['title']; ?></div>
-								<div class="show-episode" data-show-url="<?php echo $show['url'] ?>"><img src="images/loader.gif"></div>
+							<div class="content">
+
+								<div class="grid-item-header" style="background-image:url('images/header-default-bg.png')">
+
+									<div class="overlay-bg"></div>
+									<a href="" class="overlay-link" target="_blank"></a>
+
+									<div class="cover">
+										<a href="http://s.to<?php echo $show['url']; ?>" target="_blank">
+											<img src="http://s.to<?php echo $show['image']; ?>" alt="<?php echo $show['title']; ?> - Cover">
+										</a>
+									</div>
+
+									<div class="title-container">
+										<div class="show-title"><?php echo $show['title']; ?></div>
+										<div class="episode-title"></div>
+									</div>
+
+								</div>
+
+								<div class="grid-item-body">
+									<div class="column">
+										<div class="languages"></div>
+										<div class="description-container">
+											<span class="seasons-progress" style="display:none;">
+												<div class="progress">
+													<div class="progress-finished"></div>
+													<div class="progress-current"></div>
+												</div>
+											</span>
+											<span class="episodes-progress" style="display:none;">
+												<div class="progress">
+													<div class="progress-finished"></div>
+													<div class="progress-current"></div>
+												</div>
+											</span>
+											<p class="description"></p>
+										</div>
+									</div>
+								</div>
+
+								<div class="grid-item-footer">
+									
+								</div>
+
 							</div>
 
 						</div>
