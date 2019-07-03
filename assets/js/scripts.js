@@ -2,6 +2,7 @@ jQuery(function ($) {
 
 	var gridItemsCount = $('.grid-item').length;
 	var successCount   = 0;
+	var episodes = [];
 
 	$('.grid-item').each(function () {
 
@@ -25,27 +26,35 @@ jQuery(function ($) {
 				successCount++;
 				updateProgressBar();
 
-				console.log(output);
+				// console.log(output);
 
 				if (output.episode_error == 'no_unseen') {
 					item.find('.description').html('<span style="color:red; font-weight: bold;">Keine ungesehene Episode</span>');
 				}
 
+				if (output.episode_error == 'already_cached') {
+					item.html( localStorage.getItem('ntw_' + item.attr('data-title')) );
+					item.attr('data-episode-id', output.episode_id);
+					episodes.push(output.episode_id);
+				}
+
 				if (output.show_info) {
 					if (output.show_info.header_background) {
-						item.find('.grid-item-header').attr('style', output.show_info.header_background);
+						item.find('.show-background').attr('style', output.show_info.header_background);
 					}
 				}
 
 				if (output.episode_info) {
 					if (output.episode_info.title_german) {
-						item.find('.title-container > .episode-title').text(output.episode_info.title_german);
+						item.find('.episode-title').text(output.episode_info.title_german);
 					} else if (output.episode_info.title_english) {
-						item.find('.title-container > .episode-title').text(output.episode_info.title_english);
+						item.find('.episode-title').text(output.episode_info.title_english);
 					}
 
 					if (output.episode_info.description) {
-						item.find('.description').text(output.episode_info.description);
+						item.find('.description.full').text(output.episode_info.description);
+						item.find('.description.cropped').text(truncate(output.episode_info.description, 18));
+						item.find('.description.cropped').attr('title', output.episode_info.description);
 					} else {
 						item.find('.description').text('Keine Beschreibung vorhanden');
 					}
@@ -76,13 +85,14 @@ jQuery(function ($) {
 					}
 
 					if (output.episode_info.url) {
-						item.find('.grid-item-header .overlay-link').attr('href', 'https://s.to' + output.episode_info.url);
+						item.find('.episode-url').attr('href', 'https://s.to' + output.episode_info.url);
 					} else {
-						item.find('.grid-item-header .overlay-link').removeAttr('href');
+						item.find('.episode-url').removeAttr('href');
 					}
 
 					if (output.episode_info.current_episode_id) {
 						item.attr('data-episode-id', output.episode_info.current_episode_id);
+						episodes.push(output.episode_info.current_episode_id);
 					}
 				}
 
@@ -93,6 +103,9 @@ jQuery(function ($) {
 					});
 					item.find('.languages').html(lang);
 				}
+
+				// cache the item
+				localStorage.setItem('ntw_' + item.attr('data-title'), item.html());
 
 				sortGrid();
 				resizeAllGridItems();
@@ -141,6 +154,7 @@ jQuery(function ($) {
 		$('.cssProgress').delay(800).fadeOut('slow');
 		$('.show-filter > .search > input').prop('disabled', false);
 		$('.show-filter > .lang input').prop('disabled', false);
+		setCookie('ntw_unseen_ids', JSON.stringify(episodes), 3);
 	});
 
 
@@ -247,5 +261,34 @@ jQuery(function ($) {
 	// for (x = 0; x < allItems.length; x++) {
 	// 	imagesLoaded(allItems[x], resizeInstance);
 	// }
+
+
+	function setCookie(cname, cvalue, exdays) {
+		var d = new Date();
+		d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+		var expires = "expires=" + d.toUTCString();
+		document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+	}
+
+
+	function getCookie(cname) {
+		var name = cname + "=";
+		var ca = document.cookie.split(';');
+		for (var i = 0; i < ca.length; i++) {
+			var c = ca[i];
+			while (c.charAt(0) == ' ') {
+				c = c.substring(1);
+			}
+			if (c.indexOf(name) == 0) {
+				return c.substring(name.length, c.length);
+			}
+		}
+		return "";
+	}
+
+
+	function truncate(str, no_words) {
+		return str.split(" ").splice(0,no_words).join(" ") + " ...";
+	}
 
 });

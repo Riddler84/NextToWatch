@@ -177,19 +177,29 @@ function get_first_unseen_episode( $url )
  */
 function get_episode_data( $season_page ) 
 {
-	$first_unseen = $season_page->find( 'table.seasonEpisodesList tbody tr[class!=seen] .seasonEpisodeTitle a', 0 );
+	$first_unseen_id = $season_page->find( 'table.seasonEpisodesList tbody tr[class!=seen]', 0 );
+	$first_unseen_title = $season_page->find( 'table.seasonEpisodesList tbody tr[class!=seen] .seasonEpisodeTitle a', 0 );
 
 	$episode_data = [];
 
-	if ( is_object( $first_unseen ) ) 
+	if ( is_object( $first_unseen_title ) ) 
 	{
-		$episode_page = str_get_html( get_site_html( 'https://s.to' . $first_unseen->href ) );
+		// check if episode was retrieved before. Then cancel and load the episode html from localstorage.
+		if ( isset( $_COOKIE['ntw_unseen_ids'] ) && in_array( $first_unseen_id->{'data-episode-id'}, (array) json_decode( $_COOKIE['ntw_unseen_ids'] ) ) )
+		{
+			return [
+				'episode_error' => 'already_cached',
+				'episode_id' => $first_unseen_id->{'data-episode-id'}
+			];
+		}
+
+		$episode_page = str_get_html( get_site_html( 'https://s.to' . $first_unseen_title->href ) );
 
 		$episode_data['episode_info'] = [
 			'description' => empty( $episode_page->find( '.descriptionSpoiler', 0 )->plaintext ) ? '' : $episode_page->find( '.descriptionSpoiler', 0 )->plaintext,
 			'title_german' => empty( $episode_page->find( '.episodeGermanTitel', 0 )->plaintext ) ? '' : $episode_page->find( '.episodeGermanTitel', 0 )->plaintext,
 			'title_english' => empty( $episode_page->find( '.episodeEnglishTitel', 0 )->plaintext ) ? '' : $episode_page->find( '.episodeEnglishTitel', 0 )->plaintext,
-			'url' => $first_unseen->href,
+			'url' => $first_unseen_title->href,
 			'current_season' => empty( $episode_page->find( '.hosterSiteTitle', 0 )->{'data-season'} ) ? '' : $episode_page->find( '.hosterSiteTitle', 0 )->{'data-season'},
 			'current_episode' => empty( $episode_page->find( '.hosterSiteTitle', 0 )->{'data-episode'} ) ? '' : $episode_page->find( '.hosterSiteTitle', 0 )->{'data-episode'},
 			'current_episode_id' => empty( $episode_page->find( '.hosterSiteTitle', 0 )->{'data-episode-id'} ) ? '' : $episode_page->find( '.hosterSiteTitle', 0 )->{'data-episode-id'},

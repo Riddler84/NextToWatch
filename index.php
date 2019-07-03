@@ -7,6 +7,17 @@ define( 'ROOT_PATH', dirname( __FILE__ ) );
 include ROOT_PATH . '/includes/functions.php';
 
 
+// delete cache cookie if needed
+if ( isset( $_GET['action'] ) && $_GET['action'] == 'clear_cache' ) 
+{
+	if ( isset( $_COOKIE['ntw_unseen_ids'] ) ) 
+	{
+		unset( $_COOKIE['ntw_unseen_ids'] );
+		setcookie( 'ntw_unseen_ids', '', time() - 3600, '/' );
+	}
+}
+
+
 // handle ajax request and exit script
 if ( isset( $_POST['ajax_action'] ) && $_POST['ajax_action'] == 'get_episode' ) 
 {
@@ -104,64 +115,14 @@ endif;
 					</div>
 				</div>
 
-				<div class="grid-container">
+				<div class="grid-container small">
 
 					<?php
 					foreach ( $shows as $show ) :
-					?>
+					
+						// include( ROOT_PATH . '/views/grid-item-big.php' );
+						include( ROOT_PATH . '/views/grid-item-small.php' );
 
-						<div class="grid-item" data-title="<?php echo $show['title']; ?>" data-show-url="<?php echo $show['url'] ?>">
-
-							<div class="content">
-
-								<div class="grid-item-header" style="background-image:url('images/header-default-bg.png')">
-
-									<div class="overlay-bg"></div>
-									<a href="" class="overlay-link" target="_blank"></a>
-
-									<div class="cover">
-										<a href="http://s.to<?php echo $show['url']; ?>" target="_blank">
-											<img src="http://s.to<?php echo $show['image']; ?>" alt="<?php echo $show['title']; ?> - Cover">
-										</a>
-									</div>
-
-									<div class="title-container">
-										<div class="show-title"><?php echo $show['title']; ?></div>
-										<div class="episode-title"></div>
-									</div>
-
-								</div>
-
-								<div class="grid-item-body">
-									<div class="column">
-										<div class="languages"></div>
-										<div class="description-container">
-											<span class="seasons-progress" style="display:none;">
-												<div class="progress">
-													<div class="progress-finished"></div>
-													<div class="progress-current"></div>
-												</div>
-											</span>
-											<span class="episodes-progress" style="display:none;">
-												<div class="progress">
-													<div class="progress-finished"></div>
-													<div class="progress-current"></div>
-												</div>
-											</span>
-											<p class="description"></p>
-										</div>
-									</div>
-								</div>
-
-								<div class="grid-item-footer">
-									
-								</div>
-
-							</div>
-
-						</div>
-
-					<?php
 					endforeach
 					?>
 
