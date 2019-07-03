@@ -356,8 +356,11 @@ a.link-contrast:hover {
 }
 
 .grid-item.small .metadata {
-	position: relative;
 	padding: 5px 10px 0 15px;
+}
+
+.grid-item.small .metadata .titles {
+	position: relative;
 }
 
 .grid-item.small .show-title {
@@ -388,10 +391,6 @@ a.link-contrast:hover {
 
 .grid-item.small .languages img {
 	max-height: 12px;
-}
-
-.grid-item.small .description-container {
-	padding-left: 25px;
 }
 
 .grid-item.small .seasons-progress:not(:empty),

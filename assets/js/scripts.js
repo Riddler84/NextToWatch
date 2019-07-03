@@ -154,7 +154,7 @@ jQuery(function ($) {
 		$('.cssProgress').delay(800).fadeOut('slow');
 		$('.show-filter > .search > input').prop('disabled', false);
 		$('.show-filter > .lang input').prop('disabled', false);
-		setCookie('ntw_unseen_ids', JSON.stringify(episodes), 3);
+		setCookie('ntw_unseen_ids', JSON.stringify(episodes), 1);
 	});
 
 

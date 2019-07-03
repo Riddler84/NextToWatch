@@ -22,10 +22,12 @@ if ( ! defined( 'ROOT_PATH' ) )
 				</div>
 
 				<div class="metadata">
-					<div class="show-title"><?php echo $show['title']; ?></div>
-					<div class="episode-title"></div>
+					<div class="titles">
+						<div class="show-title"><?php echo $show['title']; ?></div>
+						<div class="episode-title"></div>
+						<a href="" class="overlay-link episode-url" target="_blank"></a>
+					</div>
 					<p class="description cropped"></p>
-					<a href="" class="overlay-link episode-url" target="_blank"></a>
 				</div>
 			</div>
 
